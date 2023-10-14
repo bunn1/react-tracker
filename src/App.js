@@ -1,36 +1,27 @@
 // Behövs när man jobbar med classes
 // import React from 'react';
-import { useState } from 'react'
-import Header from "./components/Header.js";
-import Tasks from "./components/Tasks.js";
-import AddTask from "./components/AddTask.js";
+import { useState, useEffect } from 'react'
+import Header from "./components/Header";
+import Tasks from "./components/Tasks";
+import AddTask from "./components/AddTask";
 
 
 function App() {
 
-  const [ tasks, setTasks ] = useState( [
-    { 
-        id: 1, 
-        text: 'Doctors Appointment',
-        day: 'Feb 5th at 2:30',
-        reminder: true,
-    },
-    { 
+  const [showAddTask, setShowAddTask] = useState(false)
+  const [ tasks, setTasks ] = useState( []);
 
-        id: 2, 
-        text: 'Meeting at school',
-        day: 'Feb 6th at 4:30',
-        reminder: true,
+  useEffect(() =>{
+    
+  })
 
-    },
-    { 
-        id: 3, 
-        text: 'Food shopping',
-        day: 'Feb 9th at 6:30',
-        reminder: false,
-
-    }
-]);
+// Add task
+const addTask = (task) => {
+  const id = Math.floor(Math.random() * 10000) +1
+  console.log(id);
+  const newTask = {id, ...task}
+  setTasks([...tasks, newTask]) 
+}
 
 // Delete task
 const deleteTask = (id) => {
@@ -43,10 +34,14 @@ const toggleReminder = (id) => {
 setTasks(tasks.map((task) => task.id === id ? {...task, reminder: !task.reminder} : task))
 }
 
+
+
+
   return (
     <div className="container">
-      <Header />
-      <AddTask />
+      <Header onAdd={() => setShowAddTask(!showAddTask)} 
+      showAdd={showAddTask}/>
+      {showAddTask && <AddTask onAdd={addTask} />}
       {tasks.length > 0 ? <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder} /> : 'No task to show'}
     </div>
   );
